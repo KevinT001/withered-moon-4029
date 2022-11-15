@@ -49,3 +49,44 @@ RSpec.describe "Flight Index" do
     expect(page).to_not have_content(@airline3.name)
 
   end
+    it "under each flight number I see the names of all that flight's passengers" do 
+
+    within "#flight-#{@flight1.id}" do
+      expect(page).to have_content(@passenger1.name)
+      expect(page).to have_content(@passenger2.name)
+    end 
+
+    within "#flight-#{@flight2.id}" do
+      expect(page).to have_content(@passenger3.name)
+    end
+  end
+
+  describe "story 2 remove a passenger from a flight" do 
+
+    it 'On flight index page, I see a link next to each passsenger name to remove the passenger from the flight' do 
+
+      within "#flight-#{@flight1.id}" do 
+        within "#passenger-#{@passenger1.id}" do 
+          expect(page).to have_link("Remove #{@passenger1.name}")
+        end
+      end
+      within "#flight-#{@flight3.id}" do 
+        within "#passenger-#{@passenger1.id}" do 
+          expect(page).to have_link("Remove #{@passenger1.name}")
+        end
+      end
+    end
+
+    it 'i click on that link and am returned to the flights index page, I no longer see the passenger' do 
+        within "#flight-#{@flight1.id}" do 
+          within "#passenger-#{@passenger1.id}" do 
+
+          click_link("Remove #{@passenger1.name}")
+          
+          expect(current_path).to eq(flights_path)
+        end
+      end
+      expect(page).to_not have_content(@passenger1)
+    end
+  end
+end 
