@@ -1,0 +1,7 @@
+<h1><center> <%= @airline.name %> Page </center> </h1>
+<hr>
+
+<% @airline.unique_adult_passengers.each do |passenger| %>
+  <p> Adult Passengers: <%= passenger %></p>
+
+  <% end %>
