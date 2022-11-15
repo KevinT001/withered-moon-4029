@@ -1,3 +1,7 @@
+require 'rails_helper' 
+
+RSpec.describe "Flight Index" do 
+  before :each do 
     @airline1 = Airline.create!(name: "Paper Plane")
     @airline2 = Airline.create!(name: "Soul Plane")
     @airline3 = Airline.create!(name: "Polar Plane")
@@ -8,7 +12,7 @@
 
     @passenger1 = Passenger.create!(name: "Goku", age: 30)
     @passenger2 = Passenger.create!(name: "Piccolo", age: 32)
-    @passenger3 = Passenger.create!(name: "Vegeta", age: 12)
+    @passenger3 = Passenger.create!(name: "Vegeta", age: 31)
     @passenger4 = Passenger.create!(name: "Gohan", age: 15)
 
     FlightPassenger.create(flight_id: @flight1.id, passenger_id: @passenger1.id )
@@ -18,3 +22,30 @@
     FlightPassenger.create(flight_id: @flight3.id, passenger_id: @passenger1.id )
 
     
+    visit flights_path
+  end
+  
+  it "I see a list of all flight numbers, next to each flight number I see the name of the airline of that flight" do 
+
+    expect(page).to have_content(@flight1.number)
+    
+    within "#flight-#{@flight1.id}" do 
+      expect(page).to have_content(@airline1.name)
+    end 
+
+
+    expect(page).to have_content(@flight2.number)
+    within "#flight-#{@flight2.id}" do 
+      expect(page).to have_content(@airline1.name)
+    end 
+
+
+    expect(page).to have_content(@flight3.number)
+    within "#flight-#{@flight3.id}" do 
+      expect(page).to have_content(@airline2.name)
+    end 
+
+
+    expect(page).to_not have_content(@airline3.name)
+
+  end
